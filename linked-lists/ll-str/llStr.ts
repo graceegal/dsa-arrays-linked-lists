@@ -70,26 +70,24 @@ class LLStr {
   pop(): string {
     if (this.head === null) throw new IndexError;
 
-    let curr: (NodeStr | null) = this.head;
-    let returnVal;
+    const fakeHead = new NodeStr('');
+    fakeHead.next = this.head;
 
-    if (this.length === 1) {
-      returnVal = curr.val;
-      this.head = this.tail = null;
-      this.length--;
-      return returnVal;
-    }
+    let curr : (NodeStr | null) = fakeHead;
+
+    if (this.length === 1) this.head = null;
 
     while (curr !== null && curr.next !== this.tail) {
       curr = curr.next;
     }
 
-    returnVal = curr?.next?.val;
+    const returnVal = curr?.next?.val;
     curr!.next = null;
-    this.tail = curr;
+    this.tail = (this.length === 1) ? null : curr;
 
     this.length--;
     return returnVal!;
+
   }
 
   /** shift(): return & remove first item.
@@ -98,7 +96,16 @@ class LLStr {
    **/
 
   shift(): string {
-    return "x";
+    if (this.head === null) throw new IndexError;
+
+    const returnVal = this.head.val;
+    this.head = this.head.next;
+
+    if (this.length === 1) this.tail = null;
+
+    this.length--;
+
+    return returnVal;
   }
 
   /** getAt(idx): get val at idx.
@@ -107,7 +114,16 @@ class LLStr {
    **/
 
   getAt(idx: number): string {
-    return "x";
+    if (idx < 0 || idx >= this.length) throw new IndexError;
+
+    let curr : (NodeStr | null) = this.head;
+
+    while (idx > 0) {
+      curr = curr!.next;
+      idx--;
+    }
+
+    return curr!.val;
   }
 
   /** setAt(idx, val): set val at idx to val.
