@@ -6,7 +6,18 @@ import { LLStr } from "../common/ll";
  **/
 
 function average(lst: LLStr): number {
-  return 42;
+  if (lst.length === 0) return 0;
+
+  let sum : number = 0;
+
+  let curr = lst.head;
+
+  while (curr !== null) {
+    sum += Number(curr.val);
+    curr = curr.next;
+  }
+
+  return (sum/lst.length);
 }
 
 export { average };

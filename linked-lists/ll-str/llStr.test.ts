@@ -132,6 +132,7 @@ describe("setAt", function () {
   });
 });
 
+// [0, a, 1, b, 4]
 describe("insertAt", function () {
   it("inserts and updates", function () {
     const lst = new LL(["a", "b"]);

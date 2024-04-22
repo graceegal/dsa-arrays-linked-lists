@@ -73,7 +73,7 @@ class LLStr {
     const fakeHead = new NodeStr('');
     fakeHead.next = this.head;
 
-    let curr : (NodeStr | null) = fakeHead;
+    let curr: (NodeStr | null) = fakeHead;
 
     if (this.length === 1) this.head = null;
 
@@ -116,7 +116,7 @@ class LLStr {
   getAt(idx: number): string {
     if (idx < 0 || idx >= this.length) throw new IndexError;
 
-    let curr : (NodeStr | null) = this.head;
+    let curr: (NodeStr | null) = this.head;
 
     while (idx > 0) {
       curr = curr!.next;
@@ -132,6 +132,16 @@ class LLStr {
    **/
 
   setAt(idx: number, val: string): void {
+    if (idx < 0 || idx >= this.length) throw new IndexError;
+
+    let curr: (NodeStr | null) = this.head;
+
+    while (idx > 0) {
+      curr = curr!.next;
+      idx--;
+    }
+
+    curr!.val = val;
   };
 
   /** insertAt(idx, val): add node w/val before idx.
@@ -140,6 +150,28 @@ class LLStr {
    **/
 
   insertAt(idx: number, val: string): void {
+    if (idx < 0 || idx > this.length) throw new IndexError;
+
+    if (this.length === 0 || idx === this.length) {
+      this.push(val);
+      return;
+    }
+
+    const fakeHead = new NodeStr('');
+    fakeHead.next = this.head;
+
+    let curr: (NodeStr | null) = fakeHead;
+
+    while (idx > 0) {
+      curr = curr!.next;
+      idx--;
+    }
+
+    const newNode: (NodeStr | null) = new NodeStr(val);
+    newNode.next = curr?.next || null;
+    curr!.next = newNode;
+    this.head = fakeHead.next;
+    this.length++;
   };
 
   /** removeAt(idx): return & remove item at idx,
@@ -148,7 +180,29 @@ class LLStr {
    **/
 
   removeAt(idx: number): string {
-    return "x";
+    if (idx < 0 || idx >= this.length) throw new IndexError;
+
+    const fakeHead = new NodeStr('');
+    fakeHead.next = this.head;
+
+    let curr: (NodeStr | null) = fakeHead;
+
+    while (idx > 0) {
+      curr = curr!.next;
+      idx--;
+    }
+
+    const returnNode: (NodeStr | null) = curr!.next;
+    curr!.next = returnNode?.next || null;
+
+    if (this.tail === returnNode) {
+      this.tail = this.length === 1 ? null : curr;
+    }
+
+    this.head = fakeHead.next;
+    this.length--;
+
+    return returnNode!.val;
   }
 
   /** toArray (useful for tests!) */
